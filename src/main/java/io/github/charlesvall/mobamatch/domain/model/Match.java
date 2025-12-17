@@ -1,45 +1,47 @@
 package io.github.charlesvall.mobamatch.domain.model;
 
-
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class Match {
 
-    @Id
     private String id;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Player> playerList;
-
+    private List<String> playerIds;
     private int averageSkill;
-
-    @Enumerated(EnumType.STRING)
     private Region region;
-    private LocalDateTime createdAt;
 
-    private Match(List<Player> playerList, Region region) {
-        this.id = java.util.UUID.randomUUID().toString();
-        this.playerList = playerList;
+    private Match(
+            List<String> playerIds,
+            int averageSkill,
+            Region region
+    ) {
+        this.playerIds = List.copyOf(playerIds);
+        this.averageSkill = averageSkill;
         this.region = region;
-        this.averageSkill = calculateAverageSkill(playerList);
-        this.createdAt = LocalDateTime.now();
     }
 
-    public static Match of(List<Player> playerList, Region region) {
-        return new Match(playerList, region);
+    public static Match of(List<Player> players, Region region) {
+        int avgSkill = calculateAverageSkill(players);
+        List<String> ids = players.stream()
+                .map(Player::getId)
+                .toList();
+
+        return new Match(ids, avgSkill, region);
     }
 
-    private int calculateAverageSkill(List<Player> playerList) {
-        return (int) playerList.stream()
+    public void updateWith(Match other) {
+        this.playerIds = other.getPlayerIds();
+        this.region = other.getRegion();
+        this.averageSkill = other.getAverageSkill();
+    }
+
+    private static int calculateAverageSkill(List<Player> players) {
+        return (int) players.stream()
                 .mapToInt(Player::getSkillLevel)
                 .average()
                 .orElse(0);

@@ -3,35 +3,35 @@ package io.github.charlesvall.mobamatch.infrastructure.entity;
 import io.github.charlesvall.mobamatch.domain.model.Region;
 import io.github.charlesvall.mobamatch.domain.model.Role;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import lombok.*;
 
 @Entity
 @Table(name = "players")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class PlayerEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    @Column(nullable = false, unique = true)
     private String username;
+
+    @Column(nullable = false)
+    @Min(0) @Max(100)
     private int skillLevel;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Region region;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role preferredRole;
 
-    public PlayerEntity(String id, String username, int skillLevel, Region region, Role preferredRole) {
-        this.id = id;
-        this.username = username;
-        this.skillLevel = skillLevel;
-        this.region = region;
-        this.preferredRole = preferredRole;
-    }
+    @Column(name = "in_match", nullable = false)
+    private boolean inMatch;
 }

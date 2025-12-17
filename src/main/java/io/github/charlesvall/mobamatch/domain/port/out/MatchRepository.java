@@ -1,13 +1,16 @@
 package io.github.charlesvall.mobamatch.domain.port.out;
 
 import io.github.charlesvall.mobamatch.domain.model.Match;
+import io.github.charlesvall.mobamatch.domain.model.MatchSearchCriteria;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface MatchRepository {
-    void save(Match match);
+    Match save(Match match);
     Optional<Match> findById(String id);
-    List<Match> findAll();
+    Page<Match> findAll(Pageable pageable);
+    Page<Match> findByCriteria(MatchSearchCriteria criteria, Pageable pageable);
     void deleteById(String id);
 }

@@ -2,12 +2,13 @@ package io.github.charlesvall.mobamatch.infrastructure.dto;
 
 import io.github.charlesvall.mobamatch.domain.model.Region;
 import io.github.charlesvall.mobamatch.domain.model.Role;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record PlayerBodyRequestDto(
+public record PlayerRequestDto(
+
         @NotBlank(message = "Username must not be empty")
         String username,
 
@@ -15,6 +16,9 @@ public record PlayerBodyRequestDto(
         @Max(value = 100, message = "Skill level cannot exceed 100")
         int skillLevel,
 
-        @NotNull Region region,
-        @NotNull Role preferredRole
+        @NotNull(message = "Region must not be null")
+        Region region,
+
+        @NotNull(message = "Preferred role must not be null")
+        Role preferredRole
 ) {}
