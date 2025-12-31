@@ -17,7 +17,6 @@ public class Player {
     private boolean inMatch;
 
     private Player(String username, int skillLevel, Region region, Role preferredRole) {
-        this.id = UUID.randomUUID().toString();
         this.username = username;
         this.skillLevel = skillLevel;
         this.region = region;
@@ -39,9 +38,6 @@ public class Player {
     }
 
     public void deactivate() {
-        if (!this.isInMatch()) {
-            throw new IllegalStateException("Player is already inactive");
-        }
         this.inMatch = false;
     }
 

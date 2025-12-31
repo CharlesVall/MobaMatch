@@ -41,11 +41,11 @@ public class MatchController {
             @ApiResponse(responseCode = "400", description = "Invalid input data"),
             @ApiResponse(responseCode = "409", description = "Match already exists")
     })
-    public ResponseEntity<MatchDto> createMatch(
+    public ResponseEntity<MatchResponseDto> createMatch(
             @Valid @RequestBody CreateMatchRequest request
     ) {
         Match createdMatch = matchService.createMatch(request.playerIds());
-        MatchDto response = matchDtoMapper.toResponseDto(createdMatch);
+        MatchResponseDto response = matchDtoMapper.toResponseDto(createdMatch);
 
         URI location = URI.create("/matches/" + createdMatch.getId());
         return ResponseEntity.created(location).body(response);
@@ -57,7 +57,7 @@ public class MatchController {
             @ApiResponse(responseCode = "200", description = "Match found"),
             @ApiResponse(responseCode = "404", description = "Match not found")
     })
-    public ResponseEntity<MatchDto> getPlayerById(
+    public ResponseEntity<MatchResponseDto> getPlayerById(
             @Parameter(description = "Match unique identifier", required = true)
             @PathVariable String matchId
     ) {
@@ -96,7 +96,7 @@ public class MatchController {
             @ApiResponse(responseCode = "200", description = "Matches retrieved successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid parameters")
     })
-    public ResponseEntity<PageDto<MatchDto>> getAllMatches(
+    public ResponseEntity<PageDto<MatchResponseDto>> getAllMatches(
             @ParameterObject
             @PageableDefault(size = 5, sort = "averageSkill", direction = Sort.Direction.ASC) Pageable pageable,
 
@@ -115,7 +115,7 @@ public class MatchController {
                 .maxAverageLevel(maxAverageLevel)
                 .build();
 
-        Page<MatchDto> dtoPage;
+        Page<MatchResponseDto> dtoPage;
         if (criteria.isEmpty()) {
             dtoPage = matchService.findAllMatch(pageable)
                     .map(matchDtoMapper::toResponseDto);

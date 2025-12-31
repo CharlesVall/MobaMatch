@@ -7,6 +7,7 @@ import io.github.charlesvall.mobamatch.domain.model.MatchSearchCriteria;
 import io.github.charlesvall.mobamatch.domain.model.Player;
 import io.github.charlesvall.mobamatch.domain.model.Region;
 import io.github.charlesvall.mobamatch.domain.port.in.MatchDomainService;
+import io.github.charlesvall.mobamatch.domain.port.in.MatchDomainStrategy;
 import io.github.charlesvall.mobamatch.domain.port.out.MatchRepository;
 import io.github.charlesvall.mobamatch.domain.port.out.PlayerRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MatchService implements MatchDomainService {
 
-    private final MatchStrategy matchStrategy;
+    private final MatchDomainStrategy matchStrategy;
     private final MatchRepository matchRepository;
     private final PlayerRepository playerRepository;
 
